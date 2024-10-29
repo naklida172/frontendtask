@@ -25,6 +25,42 @@ function getTasks() {
     return JSON.parse(localStorage.getItem('tasks')) || [];
 }
 
+function deleteTask(id) {
+    let tasks = getTasks();
+    tasks = tasks.filter(task => task.id !== id);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+}
+
+function toggleComplete(id) {
+    let tasks = getTasks();
+    tasks.forEach(task => {
+        if (task.id == id) {
+            task.completed = !task.completed;
+        }
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+}
+
+function editTask(id) {
+    let taskText = prompt('Edit your task:');
+    if (taskText !== null && taskText.trim() !== '') {
+        let tasks = getTasks();
+        tasks.forEach(task => {
+            if (task.id == id) {
+                task.text = taskText.trim();
+            }
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        renderTasks();
+    }
+}
+
+function filterTasks(status) {
+    renderTasks(status);
+}
+
 function renderTasks(filter = 'all') {
     let tasks = getTasks();
     let taskList = document.getElementById('task-list');
